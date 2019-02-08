@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'errepar-webapp-demo';
+
+  listaTipoPersonas = ['PF', 'PJ', 'ND'];
+  tipoPersonaSeleccionado: string;
 }
