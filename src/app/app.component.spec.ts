@@ -26,7 +26,7 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('errepar-webapp-demo');
   });
 
-  it('should render title in a h1 tag', () => {
+  it('should render title in i h1 tag', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;

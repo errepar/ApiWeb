@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <span>Errepar - Demo Recomendador</span>
+  <span>{{title}}</span>
 </mat-toolbar>
 
 <mat-card>
@@ -10,7 +10,85 @@
 
   <mat-card-content>
     <form>
-        
+        <mat-form-field>      
+          <mat-select placeholder="Tipo de Persona" [(ngModel)]="tipoPersonaSeleccionado" name="tipoPersona">
+            <mat-option *ngFor="let tipoPersona of listaTipoPersona" [value]="tipoPersona">
+              {{tipoPersona}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+    </form>
+
+    <form>
+        <mat-form-field>      
+          <input matInput placeholder="Ingresar Edad" [(ngModel)]="edadIngresada" name="edad">
+        </mat-form-field>
+    </form>
+
+    <form>
+      <mat-form-field>
+        <input matInput placeholder="Ingresar Tasa EOL" [(ngModel)]="tasaEOLIngresada" name="tasaEOL">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Ingresar Tasa IUS" [(ngModel)]="tasaIUSIngresada" name="tasaIUS">
+      </mat-form-field>
+    </form>
+
+    <form>
+      <mat-form-field>
+        <mat-select placeholder="Debito Automático" [(ngModel)]="tipoDebitoAutomaticoSeleccionado" name="tipoDebito">
+          <mat-option *ngFor="let tipoDebito of listaTiposDebitoAutomatico" [value]="tipoDebito">
+            {{tipoDebito}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <form>
+      <mat-form-field>
+        <input matInput placeholder="Ingresar Score" [(ngModel)]="scoreIngresado" name="score">
+      </mat-form-field>
+    </form>
+
+    <form *ngFor="let i of listaCantidadSuscripciones">
+      <mat-form-field>
+        <mat-select placeholder="Ingresar Suscripcion" [(ngModel)]="suscripcion[i]" name="suscripcion">
+          <mat-option *ngFor="let suscripcion of listaSuscripciones" [value]="suscripcion">
+            {{suscripcion}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <form>
+      <mat-form-field>
+        <mat-select placeholder="Ingresar Domicilio 1" [(ngModel)]="domicilioIngresadoA" name="domicilioA">
+          <mat-option *ngFor="let domicilio of listaDomicilios" [value]="domicilio">
+            {{domicilio}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <form>
+      <mat-form-field>
+        <mat-select placeholder="Ingresar Domicilio 2" [(ngModel)]="domicilioIngresadoB" name="domicilioB">
+          <mat-option *ngFor="let domicilio of listaDomicilios" [value]="domicilio">
+            {{domicilio}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </form>
   </mat-card-content>
+
+  <!--PROVISORIO!!!-->
+  <mat-label>
+    Datos: {{tipoPersonaSeleccionado}}, {{edadIngresada}}, {{tasaEOLIngresada}}, {{tasaIUSIngresada}},
+    {{tipoDebitoAutomaticoSeleccionado}}, {{scoreIngresado}}, {{cantidadSuscripcionesIngresada}},
+    {{suscripcion[0]}}, {{suscripcion[1]}}, {{suscripcion[2]}}, {{suscripcion[3]}},
+    {{suscripcion[4]}}, {{suscripcion[5]}}, {{suscripcion[6]}}, {{suscripcion[7]}},
+    {{suscripcion[8]}}, {{suscripcion[9]}}, {{suscripcion[10]}}, {{suscripcion[11]}},
+    {{suscripcion[12]}}, {{suscripcion[13]}},
+    {{domicilioIngresadoA}}, {{domicilioIngresadoB}}
+  </mat-label>
 </mat-card>
