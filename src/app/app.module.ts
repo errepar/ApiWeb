@@ -14,6 +14,9 @@ import { MatCardModule } from '@angular/material';
 import { MatIconModule } from '@angular/material';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material';
+
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,9 @@ import { MatSelectModule } from '@angular/material';
     MatCardModule,
     MatIconModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
