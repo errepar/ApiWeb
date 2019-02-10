@@ -83,14 +83,92 @@
 
   <button mat-raised-button type="button" color="primary" (click)="enviarDatos()">Enviar CSV</button>
 
-  <!--PROVISORIO!!!-->
-  <mat-label>
-    Datos: {{tipoPersonaSeleccionado}}, {{edadIngresada}}, {{tasaEOLIngresada}}, {{tasaIUSIngresada}},
-    {{tipoDebitoAutomaticoSeleccionado}}, {{scoreIngresado}},
-    {{suscripcion[0]}}, {{suscripcion[1]}}, {{suscripcion[2]}}, {{suscripcion[3]}},
-    {{suscripcion[4]}}, {{suscripcion[5]}}, {{suscripcion[6]}}, {{suscripcion[7]}},
-    {{suscripcion[8]}}, {{suscripcion[9]}}, {{suscripcion[10]}}, {{suscripcion[11]}},
-    {{suscripcion[12]}}, {{suscripcion[13]}},
-    {{domicilioIngresadoA}}, {{domicilioIngresadoB}}
-  </mat-label>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Tabla con las Predicciones</mat-card-title>
+    <mat-card-subtitle>Se predice un tema, un subtema y un behaviour</mat-card-subtitle>
+  </mat-card-header>
+
+  <table mat-table *ngIf="dataSourcePrediccionFinal" [dataSource]="dataSourcePrediccionFinal">
+    <ng-container matColumnDef="elemento">
+      <th mat-header-cell *matHeaderCellDef>Elemento</th>
+      <td mat-cell *matCellDef="let element">{{element.elemento}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="prediccion">
+      <th mat-header-cell *matHeaderCellDef>Predicción</th>
+      <td mat-cell *matCellDef="let element">{{element.prediccion}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="headersPrediccionFinal"></tr>
+    <tr mat-row *matRowDef="let row; columns: headersPrediccionFinal;"></tr>
+  </table>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Tabla con las Predicciones de TEMA</mat-card-title>
+    <mat-card-subtitle>Se muestran las predicciones RAW del modelo predictivo</mat-card-subtitle>
+  </mat-card-header>
+
+  <table mat-table *ngIf="dataSourcePrediccionTema" [dataSource]="dataSourcePrediccionTema">
+    <ng-container matColumnDef="categoria">
+      <th mat-header-cell *matHeaderCellDef>Categoria</th>
+      <td mat-cell *matCellDef="let element">{{element.categoria}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="prediccion_raw">
+      <th mat-header-cell *matHeaderCellDef>Predicción RAW (Probabilidad)</th>
+      <td mat-cell *matCellDef="let element">{{element.prediccion_raw}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtemaBehaviour"></tr>
+    <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtemaBehaviour;"></tr>
+  </table>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Tabla con las Predicciones de SUBTEMA</mat-card-title>
+    <mat-card-subtitle>Se muestran las predicciones RAW del modelo predictivo</mat-card-subtitle>
+  </mat-card-header>
+
+  <table mat-table *ngIf="dataSourcePrediccionSubtema" [dataSource]="dataSourcePrediccionSubtema">
+    <ng-container matColumnDef="categoria">
+      <th mat-header-cell *matHeaderCellDef>Categoria</th>
+      <td mat-cell *matCellDef="let element">{{element.categoria}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="prediccion_raw">
+      <th mat-header-cell *matHeaderCellDef>Predicción RAW (Probabilidad)</th>
+      <td mat-cell *matCellDef="let element">{{element.prediccion_raw}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtemaBehaviour"></tr>
+    <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtemaBehaviour;"></tr>
+  </table>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Tabla con las Predicciones de BEHAVIOUR</mat-card-title>
+    <mat-card-subtitle>Se muestran las predicciones RAW del modelo predictivo</mat-card-subtitle>
+  </mat-card-header>
+
+  <table mat-table *ngIf="dataSourcePrediccionBehaviour" [dataSource]="dataSourcePrediccionBehaviour">
+    <ng-container matColumnDef="categoria">
+      <th mat-header-cell *matHeaderCellDef>Categoria</th>
+      <td mat-cell *matCellDef="let element">{{element.categoria}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="prediccion_raw">
+      <th mat-header-cell *matHeaderCellDef>Predicción RAW (Probabilidad)</th>
+      <td mat-cell *matCellDef="let element">{{element.prediccion_raw}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtemaBehaviour"></tr>
+    <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtemaBehaviour;"></tr>
+  </table>
 </mat-card>

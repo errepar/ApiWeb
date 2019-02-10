@@ -1,5 +1,50 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {MatTableDataSource} from '@angular/material';
+
+export class DatosClasificacion {
+  prediccionesRawTema: number[];
+  prediccionesRawSubtema: number[];
+  prediccionesRawBehaviour: number[];
+  categoriasAsociadasTema: number[];
+  categoriasAsociadasSubtema: number[];
+  categoriasAsociadasBehaviour: number[];
+  prediccionFinalTema: number;
+  prediccionFinalSubtema: number;
+  prediccionFinalBehaviour: number;
+
+  constructor(
+    prediccionesRawTema: number[],
+    prediccionesRawSubtema: number[],
+    prediccionesRawBehaviour: number[],
+    categoriasAsociadasTema: number[],
+    categoriasAsociadasSubtema: number[],
+    categoriasAsociadasBehaviour: number[],
+    prediccionFinalTema: number,
+    prediccionFinalSubtema: number,
+    prediccionFinalBehaviour: number
+  ) {
+    this.prediccionesRawTema = prediccionesRawTema;
+    this.prediccionesRawSubtema = prediccionesRawSubtema;
+    this.prediccionesRawBehaviour = prediccionesRawBehaviour;
+    this.categoriasAsociadasTema = categoriasAsociadasTema;
+    this.categoriasAsociadasSubtema = categoriasAsociadasSubtema;
+    this.categoriasAsociadasBehaviour = categoriasAsociadasBehaviour;
+    this.prediccionFinalTema = prediccionFinalTema;
+    this.prediccionFinalSubtema = prediccionFinalSubtema;
+    this.prediccionFinalBehaviour = prediccionFinalBehaviour;
+  }
+}
+
+export interface PrediccionFinal {
+  elemento: string;
+  prediccion: number;
+}
+
+export interface PrediccionTemaSubtemaBehaviour {
+  categoria: number;
+  prediccion_raw: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -32,13 +77,22 @@ export class AppComponent {
   tasaIUSIngresada = undefined;
   tipoDebitoAutomaticoSeleccionado = undefined;
   scoreIngresado = undefined;
-
   suscripcion = [];
-
   domicilioIngresadoA = undefined;
   domicilioIngresadoB = undefined;
 
-  constructor(private http: HttpClient) {}
+  // TABLA PREDICCION FINAL
+  headersPrediccionFinal: string[] = ['elemento', 'prediccion'];
+  dataSourcePrediccionFinal: MatTableDataSource<PrediccionFinal>;
+
+  // TABLA PREDICCION TEMA-SUBTEMA-BEHAVIOUR
+  headersPrediccionTemaSubtemaBehaviour: string[] = ['categoria', 'prediccion_raw'];
+  dataSourcePrediccionTema: MatTableDataSource<PrediccionTemaSubtemaBehaviour>;
+  dataSourcePrediccionSubtema: MatTableDataSource<PrediccionTemaSubtemaBehaviour>;
+  dataSourcePrediccionBehaviour: MatTableDataSource<PrediccionTemaSubtemaBehaviour>;
+
+  constructor(private http: HttpClient) {
+  }
 
   enviarDatos() {
     const datosObtenidos = {
@@ -86,7 +140,10 @@ export class AppComponent {
     );
 
     const csvProvisorio = [
-      'TipoPersona,Edad,TasaEOL,TasaIUS,DebitoAutomatico,Score,suscripcion_1,suscripcion_2,suscripcion_3,suscripcion_4,suscripcion_5,suscripcion_6,suscripcion_7,suscripcion_8,suscripcion_9,suscripcion_10,suscripcion_11,suscripcion_12,suscripcion_13,suscripcion_14,localidad_1,localidad_2\n',
+      'TipoPersona,Edad,TasaEOL,TasaIUS,DebitoAutomatico,Score,' +
+      'suscripcion_1,suscripcion_2,suscripcion_3,suscripcion_4,suscripcion_5,suscripcion_6,suscripcion_7,' +
+      'suscripcion_8,suscripcion_9,suscripcion_10,suscripcion_11,suscripcion_12,suscripcion_13,suscripcion_14,' +
+      'localidad_1,localidad_2\n',
       '1,0,15,0,0,9.0,0,33,33,33,33,33,33,33,33,33,33,33,33,33,CIUDAD AUTONOMA BUENOS AIRES,0'
     ];
 
@@ -98,7 +155,50 @@ export class AppComponent {
     form.append('client_data', csvFile);
 
     this.http.post('http://localhost:5000/predict', form).subscribe(response => {
-      console.log(response);
+      const datos = new DatosClasificacion(
+        response['predicciones_raw']['tema'][0],
+        response['predicciones_raw']['subtema'][0],
+        response['predicciones_raw']['behaviour'][0],
+        response['categorias_asociadas']['tema'],
+        response['categorias_asociadas']['subtema'],
+        response['categorias_asociadas']['behaviour'],
+        response['prediccion_final']['tema'],
+        response['prediccion_final']['subtema'],
+        response['prediccion_final']['behaviour'],
+      );
+
+      const datosPrediccionFinal = [];
+      datosPrediccionFinal.push({elemento: 'tema', prediccion: datos.prediccionFinalTema});
+      datosPrediccionFinal.push({elemento: 'subtema', prediccion: datos.prediccionFinalSubtema});
+      datosPrediccionFinal.push({elemento: 'behaviour', prediccion: datos.prediccionFinalBehaviour});
+      this.dataSourcePrediccionFinal = new MatTableDataSource<PrediccionFinal>(datosPrediccionFinal);
+
+      const datosPrediccionTema = [];
+      this.zip(datos.categoriasAsociadasTema, datos.prediccionesRawTema).forEach(x => {
+        datosPrediccionTema.push({categoria: x[0], prediccion_raw: x[1]});
+      });
+      this.dataSourcePrediccionTema = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>(datosPrediccionTema);
+
+      const datosPrediccionSubtema = [];
+      this.zip(datos.categoriasAsociadasSubtema, datos.prediccionesRawSubtema).forEach(x => {
+        datosPrediccionSubtema.push({categoria: x[0], prediccion_raw: x[1]});
+      });
+      this.dataSourcePrediccionSubtema = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>(datosPrediccionSubtema);
+
+      const datosPrediccionBehaviour = [];
+      this.zip(datos.categoriasAsociadasBehaviour, datos.prediccionesRawBehaviour).forEach(x => {
+        datosPrediccionBehaviour.push({categoria: x[0], prediccion_raw: x[1]});
+      });
+      this.dataSourcePrediccionBehaviour = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>(datosPrediccionBehaviour);
+
+      console.log(datos.prediccionesRawTema);
+      console.log('que onda bigote');
+    });
+  }
+
+  zip(a, b) {
+    return a.map(function (e, i) {
+      return [e, b[i]];
     });
   }
 }
