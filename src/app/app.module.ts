@@ -16,6 +16,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material';
 import {MatButtonModule} from '@angular/material';
 import {MatTableModule} from '@angular/material';
+import {MatSortModule} from '@angular/material';
+import {MatPaginatorModule} from '@angular/material';
 
 import {HttpClientModule} from '@angular/common/http';
 
@@ -36,7 +38,9 @@ import {HttpClientModule} from '@angular/common/http';
     MatSelectModule,
     MatButtonModule,
     HttpClientModule,
-    MatTableModule
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

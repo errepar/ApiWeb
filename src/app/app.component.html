@@ -81,7 +81,8 @@
     </form>
   </mat-card-content>
 
-  <button mat-raised-button type="button" color="primary" (click)="enviarDatos()">Enviar CSV</button>
+  <button mat-raised-button type="button" color="primary" (click)="enviarDatos(false)">Enviar CSV</button>
+  <button mat-raised-button type="button" color="primary" (click)="enviarDatos(true)">Enviar CSV Mock</button>
 
 </mat-card>
 
@@ -113,20 +114,22 @@
     <mat-card-subtitle>Se muestran las predicciones RAW del modelo predictivo</mat-card-subtitle>
   </mat-card-header>
 
-  <table mat-table *ngIf="dataSourcePrediccionTema" [dataSource]="dataSourcePrediccionTema">
+  <table mat-table #MatSortTema="matSort" *ngIf="dataSourcePrediccionTema" [dataSource]="dataSourcePrediccionTema" matSort>
     <ng-container matColumnDef="categoria">
       <th mat-header-cell *matHeaderCellDef>Categoria</th>
       <td mat-cell *matCellDef="let element">{{element.categoria}}</td>
     </ng-container>
 
     <ng-container matColumnDef="prediccion_raw">
-      <th mat-header-cell *matHeaderCellDef>Predicción RAW (Probabilidad)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Predicción RAW (Probabilidad)</th>
       <td mat-cell *matCellDef="let element">{{element.prediccion_raw}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtemaBehaviour"></tr>
     <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtemaBehaviour;"></tr>
   </table>
+
+  <mat-paginator #MatPaginatorTema [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </mat-card>
 
 <mat-card>
@@ -135,20 +138,22 @@
     <mat-card-subtitle>Se muestran las predicciones RAW del modelo predictivo</mat-card-subtitle>
   </mat-card-header>
 
-  <table mat-table *ngIf="dataSourcePrediccionSubtema" [dataSource]="dataSourcePrediccionSubtema">
+  <table mat-table #MatSortSubtema="matSort" *ngIf="dataSourcePrediccionSubtema" [dataSource]="dataSourcePrediccionSubtema" matSort>
     <ng-container matColumnDef="categoria">
       <th mat-header-cell *matHeaderCellDef>Categoria</th>
       <td mat-cell *matCellDef="let element">{{element.categoria}}</td>
     </ng-container>
 
     <ng-container matColumnDef="prediccion_raw">
-      <th mat-header-cell *matHeaderCellDef>Predicción RAW (Probabilidad)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Predicción RAW (Probabilidad)</th>
       <td mat-cell *matCellDef="let element">{{element.prediccion_raw}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtemaBehaviour"></tr>
     <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtemaBehaviour;"></tr>
   </table>
+
+  <mat-paginator #MatPaginatorSubtema [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </mat-card>
 
 <mat-card>
@@ -157,18 +162,20 @@
     <mat-card-subtitle>Se muestran las predicciones RAW del modelo predictivo</mat-card-subtitle>
   </mat-card-header>
 
-  <table mat-table *ngIf="dataSourcePrediccionBehaviour" [dataSource]="dataSourcePrediccionBehaviour">
+  <table mat-table #MatSortBehaviour="matSort" *ngIf="dataSourcePrediccionBehaviour" [dataSource]="dataSourcePrediccionBehaviour" matSort>
     <ng-container matColumnDef="categoria">
       <th mat-header-cell *matHeaderCellDef>Categoria</th>
       <td mat-cell *matCellDef="let element">{{element.categoria}}</td>
     </ng-container>
 
     <ng-container matColumnDef="prediccion_raw">
-      <th mat-header-cell *matHeaderCellDef>Predicción RAW (Probabilidad)</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Predicción RAW (Probabilidad)</th>
       <td mat-cell *matCellDef="let element">{{element.prediccion_raw}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtemaBehaviour"></tr>
     <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtemaBehaviour;"></tr>
   </table>
+
+  <mat-paginator #MatPaginatorBehaviour [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </mat-card>
