@@ -7,58 +7,70 @@
     <mat-card-title>Entrada de Datos</mat-card-title>
     <mat-card-subtitle>Información a ingresar en las redes neuronales</mat-card-subtitle>
   </mat-card-header>
-
+  
+  
   <mat-card-content>
-    <form>
-        <mat-form-field>      
-          <mat-select placeholder="Tipo de Persona" [(ngModel)]="tipoPersonaSeleccionado" name="tipoPersona">
-            <mat-option *ngFor="let tipoPersona of listaTipoPersona" [value]="tipoPersona">
-              {{tipoPersona}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-    </form>
-
-    <form>
-        <mat-form-field>      
-          <input matInput placeholder="Ingresar Edad" [(ngModel)]="edadIngresada" name="edad">
-        </mat-form-field>
-    </form>
-
-    <form>
-      <mat-form-field>
-        <input matInput placeholder="Ingresar Tasa EOL" [(ngModel)]="tasaEOLIngresada" name="tasaEOL">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Ingresar Tasa IUS" [(ngModel)]="tasaIUSIngresada" name="tasaIUS">
-      </mat-form-field>
-    </form>
-
-    <form>
-      <mat-form-field>
-        <mat-select placeholder="Debito Automático" [(ngModel)]="tipoDebitoAutomaticoSeleccionado" name="tipoDebito">
-          <mat-option *ngFor="let tipoDebito of listaTiposDebitoAutomatico" [value]="tipoDebito">
-            {{tipoDebito}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </form>
-
-    <form>
-      <mat-form-field>
-        <input matInput placeholder="Ingresar Score" [(ngModel)]="scoreIngresado" name="score">
-      </mat-form-field>
-    </form>
-
-    <form *ngFor="let i of listaCantidadSuscripciones">
-      <mat-form-field>
-        <mat-select placeholder="Ingresar Suscripcion" [(ngModel)]="suscripcion[i]" name="suscripcion">
-          <mat-option *ngFor="let suscripcion of listaSuscripciones" [value]="suscripcion">
-            {{suscripcion}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </form>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+            <form>
+                <mat-form-field>      
+                  <mat-select placeholder="Tipo de Persona" [(ngModel)]="tipoPersonaSeleccionado" name="tipoPersona">
+                    <mat-option *ngFor="let tipoPersona of listaTipoPersona" [value]="tipoPersona">
+                      {{tipoPersona}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </form>
+        
+            <form>
+                <mat-form-field>      
+                  <input matInput placeholder="Ingresar Edad" [(ngModel)]="edadIngresada" name="edad">
+                </mat-form-field>
+            </form>
+        
+            <form>
+              <mat-form-field>
+                <input matInput placeholder="Ingresar Tasa EOL" [(ngModel)]="tasaEOLIngresada" name="tasaEOL">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Ingresar Tasa IUS" [(ngModel)]="tasaIUSIngresada" name="tasaIUS">
+              </mat-form-field>
+            </form>
+        
+            <form>
+              <mat-form-field>
+                <mat-select placeholder="Debito Automático" [(ngModel)]="tipoDebitoAutomaticoSeleccionado" name="tipoDebito">
+                  <mat-option *ngFor="let tipoDebito of listaTiposDebitoAutomatico" [value]="tipoDebito">
+                    {{tipoDebito}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </form>
+        
+            <form>
+              <mat-form-field>
+                <input matInput placeholder="Ingresar Score" [(ngModel)]="scoreIngresado" name="score">
+              </mat-form-field>
+            </form>
+        
+        </div>
+        <div class="col-md-6">
+            <form *ngFor="let i of listaCantidadSuscripciones">
+                <mat-form-field>
+                  <mat-select placeholder="Ingresar Suscripcion" [(ngModel)]="suscripcion[i]" name="suscripcion">
+                    <mat-option *ngFor="let suscripcion of listaSuscripciones" [value]="suscripcion">
+                      {{suscripcion}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </form>
+        </div>
+      </div>
+    </div>
+    
+    
+    
 
     <form>
       <mat-form-field>

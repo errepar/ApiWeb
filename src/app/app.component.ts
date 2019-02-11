@@ -119,7 +119,6 @@ export class AppComponent {
       localidad_1: this.domicilioIngresadoA,
       localidad_2: this.domicilioIngresadoB
     };
-
     const csvLines = [];
     csvLines.push(
       'TipoPersona,Edad,TasaEOL,TasaIUS,DebitoAutomatico,Score,' +
