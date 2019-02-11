@@ -58,17 +58,38 @@ export class AppComponent {
   listaTiposDebitoAutomatico = ['SI', 'NO', 'N/D'];
   listaCantidadSuscripciones = Array.from(Array(14).keys());
   listaSuscripciones = [
-    'COL ERREPAR CONSULTOR TRIBUTARIO', 'ERREIUS ON LINE',
-    'COL ERREPAR SANTA FE EOL (10)', 'ERREIUS ON LINE (DEMO)',
-    'COL ERREPAR CONSULTOR TRIBUTARIO', 'ENC. LAB. CLASICA PAPEL- 5 T. + DP',
-    'ENC. LAB. CLASICA PAPEL- 5 T.', 'COL ERREPAR RURAL',
-    'ENC. TRIB. CLASICA EOL (3)', 'ERREIUS (20)'
+    'ENC TRIB CLASICA EOL',
+    'ENC TRIB CLASICA PAPEL 13 T',
+    'IMPUESTOS NACIONALES 2 TOMOS',
+    'COL ERREPAR CORDOBA',
+    'CONTABILIDAD Y ADMINISTRACION FULL',
+    'COL ORO',
+    'ENC TRIB CLASICA',
+    'ENC TRIB CLASICA PAPEL 12 T',
+    'ENC LAB CLASICA PAPEL 5 T',
+    'DOCTRINA PENAL TRIBUTARIA Y ECONOMICA EOL'
   ];
-  listaDomicilios = [
+  listaLocalidades = [
     'CIUDAD AUTONOMA BUENOS AIRES', 'CORDOBA', 'ROSARIO', 'LA PLATA', 'SANTA FE',
     'MAR DEL PLATA', 'SALTA', 'MENDOZA', 'SAN MIGUEL DE TUCUMAN', 'BAHIA BLANCA',
     'N/D'
   ];
+  diccionarioTipoPersona = {'Física': 0, 'Jurídica': 1, 'N/D': 2, undefined: 2};
+  diccionarioTipoDebito = {'NO': 0, 'SI': 1, 'N/D': 2, undefined: 2};
+  diccionarioSuscripciones = {
+    'ENC TRIB CLASICA EOL': 0,
+    'ENC TRIB CLASICA PAPEL 13 T': 1,
+    'IMPUESTOS NACIONALES 2 TOMOS': 2,
+    'COL ERREPAR CORDOBA': 3,
+    'CONTABILIDAD Y ADMINISTRACION FULL': 4,
+    'COL ORO': 5,
+    'ENC TRIB CLASICA': 6,
+    'ENC TRIB CLASICA PAPEL 12 T': 7,
+    'ENC LAB CLASICA PAPEL 5 T': 8,
+    'DOCTRINA PENAL TRIBUTARIA Y ECONOMICA EOL': 9,
+    'N/D': 33,
+    undefined: 33
+  };
 
   // Variables input del formulario
   tipoPersonaSeleccionado = undefined;
@@ -99,7 +120,8 @@ export class AppComponent {
   dataSourcePrediccionSubtema: MatTableDataSource = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>();
   dataSourcePrediccionBehaviour: MatTableDataSource = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   enviarDatos(enviarCsvMock: boolean) {
     const datosObtenidos = {
@@ -123,8 +145,8 @@ export class AppComponent {
       suscripcion_12: this.suscripcion[11],
       suscripcion_13: this.suscripcion[12],
       suscripcion_14: this.suscripcion[13],
-      localidad_1: this.domicilioIngresadoA,
-      localidad_2: this.domicilioIngresadoB
+      localidad_1: this.domicilioIngresadoA === undefined ? '0' : this.domicilioIngresadoA,
+      localidad_2: this.domicilioIngresadoB === undefined ? '0' : this.domicilioIngresadoB
     };
 
     const csvLines = [];
@@ -136,13 +158,23 @@ export class AppComponent {
       'localidad_2\n'
     );
     csvLines.push(
-      datosObtenidos.TipoPersona + ',' + datosObtenidos.Edad + ',' + datosObtenidos.TasaEOL + ',' +
-      datosObtenidos.TasaIUS + ',' + datosObtenidos.DebitoAutomatico + ',' + datosObtenidos.Score + ',' +
-      datosObtenidos.suscripcion_1 + ',' + datosObtenidos.suscripcion_2 + ',' + datosObtenidos.suscripcion_3 + ',' +
-      datosObtenidos.suscripcion_4 + ',' + datosObtenidos.suscripcion_5 + ',' + datosObtenidos.suscripcion_6 + ',' +
-      datosObtenidos.suscripcion_7 + ',' + datosObtenidos.suscripcion_8 + ',' + datosObtenidos.suscripcion_9 + ',' +
-      datosObtenidos.suscripcion_10 + ',' + datosObtenidos.suscripcion_11 + ',' + datosObtenidos.suscripcion_12 + ',' +
-      datosObtenidos.suscripcion_13 + ',' + datosObtenidos.suscripcion_14 + ',' +
+      this.diccionarioTipoPersona[datosObtenidos.TipoPersona] + ',' +
+      datosObtenidos.Edad + ',' + datosObtenidos.TasaEOL + ',' + datosObtenidos.TasaIUS + ',' +
+      this.diccionarioTipoDebito[datosObtenidos.DebitoAutomatico] + ',' + datosObtenidos.Score + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_1] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_2] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_3] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_4] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_5] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_6] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_7] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_8] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_9] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_10] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_11] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_12] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_13] + ',' +
+      this.diccionarioSuscripciones[datosObtenidos.suscripcion_14] + ',' +
       datosObtenidos.localidad_1 + ',' + datosObtenidos.localidad_2
     );
 

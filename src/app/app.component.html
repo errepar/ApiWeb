@@ -63,7 +63,7 @@
     <form>
       <mat-form-field>
         <mat-select placeholder="Ingresar Domicilio 1" [(ngModel)]="domicilioIngresadoA" name="domicilioA">
-          <mat-option *ngFor="let domicilio of listaDomicilios" [value]="domicilio">
+          <mat-option *ngFor="let domicilio of listaLocalidades" [value]="domicilio">
             {{domicilio}}
           </mat-option>
         </mat-select>
@@ -73,7 +73,7 @@
     <form>
       <mat-form-field>
         <mat-select placeholder="Ingresar Domicilio 2" [(ngModel)]="domicilioIngresadoB" name="domicilioB">
-          <mat-option *ngFor="let domicilio of listaDomicilios" [value]="domicilio">
+          <mat-option *ngFor="let domicilio of listaLocalidades" [value]="domicilio">
             {{domicilio}}
           </mat-option>
         </mat-select>
