@@ -1,6 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {String} from 'typescript-string-operations';
 
 export class DatosClasificacion {
   prediccionesRawTema: number[];
@@ -12,6 +13,7 @@ export class DatosClasificacion {
   prediccionFinalTema: number;
   prediccionFinalSubtema: number;
   prediccionFinalBehaviour: number;
+  servicios: number[]
 
   constructor(
     prediccionesRawTema: number[],
@@ -22,7 +24,8 @@ export class DatosClasificacion {
     categoriasAsociadasBehaviour: number[],
     prediccionFinalTema: number,
     prediccionFinalSubtema: number,
-    prediccionFinalBehaviour: number
+    prediccionFinalBehaviour: number,
+    servicios: number[]
   ) {
     this.prediccionesRawTema = prediccionesRawTema;
     this.prediccionesRawSubtema = prediccionesRawSubtema;
@@ -33,6 +36,7 @@ export class DatosClasificacion {
     this.prediccionFinalTema = prediccionFinalTema;
     this.prediccionFinalSubtema = prediccionFinalSubtema;
     this.prediccionFinalBehaviour = prediccionFinalBehaviour;
+    this.servicios = servicios;
   }
 }
 
@@ -41,9 +45,15 @@ export interface PrediccionFinal {
   prediccion: number;
 }
 
-export interface PrediccionTemaSubtemaBehaviour {
+export interface PrediccionTemaSubtema {
   categoria: number;
   prediccion_raw: number;
+}
+
+export interface PrediccionBehaviour {
+  categoria: number;
+  prediccion_raw: number;
+  lo_utiliza: string;
 }
 
 @Component({
@@ -101,6 +111,7 @@ export class AppComponent {
   suscripcion = [];
   domicilioIngresadoA = undefined;
   domicilioIngresadoB = undefined;
+  idClienteIngresado = undefined;
 
   @ViewChild('MatSortTema') sortTema: MatSort;
   @ViewChild('MatSortSubtema') sortSubtema: MatSort;
@@ -115,10 +126,12 @@ export class AppComponent {
   dataSourcePrediccionFinal: MatTableDataSource<PrediccionFinal>;
 
   // TABLA PREDICCION TEMA-SUBTEMA-BEHAVIOUR
-  headersPrediccionTemaSubtemaBehaviour: string[] = ['categoria', 'prediccion_raw'];
-  dataSourcePrediccionTema: MatTableDataSource = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>();
-  dataSourcePrediccionSubtema: MatTableDataSource = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>();
-  dataSourcePrediccionBehaviour: MatTableDataSource = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>();
+  headersPrediccionTemaSubtema: string[] = ['categoria', 'prediccion_raw'];
+  dataSourcePrediccionTema: MatTableDataSource = new MatTableDataSource<PrediccionTemaSubtema>();
+  dataSourcePrediccionSubtema: MatTableDataSource = new MatTableDataSource<PrediccionTemaSubtema>();
+
+  headersPrediccionBehaviour: string[] = ['categoria', 'prediccion_raw', 'lo_utiliza'];
+  dataSourcePrediccionBehaviour: MatTableDataSource = new MatTableDataSource<PrediccionBehaviour>();
 
   constructor(private http: HttpClient) {
   }
@@ -191,14 +204,17 @@ export class AppComponent {
     let csvFile;
     if (enviarCsvMock) {
       csvFile = new File(csvProvisorio, 'temp.csv');
+      this.idClienteIngresado = 301180;
     } else {
       csvFile = new File(csvLines, 'temp.csv');
     }
 
+    const url = String.Format('http://localhost:5000/predict/{0}', this.idClienteIngresado);
+
     const form = new FormData();
     form.append('client_data', csvFile);
 
-    this.http.post('http://localhost:5000/predict', form).subscribe(response => {
+    this.http.post(url, form).subscribe(response => {
       const datos = new DatosClasificacion(
         response['predicciones_raw']['tema'][0],
         response['predicciones_raw']['subtema'][0],
@@ -209,7 +225,10 @@ export class AppComponent {
         response['prediccion_final']['tema'],
         response['prediccion_final']['subtema'],
         response['prediccion_final']['behaviour'],
+        response['servicios']
       );
+
+      console.log(datos);
 
       const datosPrediccionFinal = [];
       datosPrediccionFinal.push({elemento: 'tema', prediccion: datos.prediccionFinalTema});
@@ -221,7 +240,7 @@ export class AppComponent {
       this.zip(datos.categoriasAsociadasTema, datos.prediccionesRawTema).forEach(x => {
         datosPrediccionTema.push({categoria: x[0], prediccion_raw: x[1]});
       });
-      this.dataSourcePrediccionTema = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>(datosPrediccionTema);
+      this.dataSourcePrediccionTema = new MatTableDataSource<PrediccionTemaSubtema>(datosPrediccionTema);
       this.dataSourcePrediccionTema.sort = this.sortTema;
       this.dataSourcePrediccionTema.paginator = this.paginatorTema;
 
@@ -229,19 +248,20 @@ export class AppComponent {
       this.zip(datos.categoriasAsociadasSubtema, datos.prediccionesRawSubtema).forEach(x => {
         datosPrediccionSubtema.push({categoria: x[0], prediccion_raw: x[1]});
       });
-      this.dataSourcePrediccionSubtema = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>(datosPrediccionSubtema);
+      this.dataSourcePrediccionSubtema = new MatTableDataSource<PrediccionTemaSubtema>(datosPrediccionSubtema);
       this.dataSourcePrediccionSubtema.sort = this.sortSubtema;
       this.dataSourcePrediccionSubtema.paginator = this.paginatorSubtema;
 
       const datosPrediccionBehaviour = [];
       this.zip(datos.categoriasAsociadasBehaviour, datos.prediccionesRawBehaviour).forEach(x => {
-        datosPrediccionBehaviour.push({categoria: x[0], prediccion_raw: Number(+x[1])});
+        const utilizaServicio = datos.servicios.includes(x[0]) ? 'SI' : '-';
+
+        datosPrediccionBehaviour.push({categoria: x[0], prediccion_raw: Number(+x[1]), lo_utiliza: utilizaServicio});
       });
-      this.dataSourcePrediccionBehaviour = new MatTableDataSource<PrediccionTemaSubtemaBehaviour>(datosPrediccionBehaviour);
+      this.dataSourcePrediccionBehaviour = new MatTableDataSource<PrediccionBehaviour>(datosPrediccionBehaviour);
       this.dataSourcePrediccionBehaviour.sort = this.sortBehaviour;
       this.dataSourcePrediccionBehaviour.paginator = this.paginatorBehaviour;
 
-      console.log(datos.prediccionesRawTema);
       console.log('que onda bigote');
     });
   }

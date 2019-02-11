@@ -79,6 +79,12 @@
         </mat-select>
       </mat-form-field>
     </form>
+
+    <form>
+      <mat-form-field>
+        <input matInput placeholder="Ingresar ID Cliente" [(ngModel)]="idClienteIngresado" name="idClienteIngresado">
+      </mat-form-field>
+    </form>
   </mat-card-content>
 
   <button mat-raised-button type="button" color="primary" (click)="enviarDatos(false)">Enviar CSV</button>
@@ -125,8 +131,8 @@
       <td mat-cell *matCellDef="let element">{{element.prediccion_raw}}</td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtemaBehaviour"></tr>
-    <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtemaBehaviour;"></tr>
+    <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtema"></tr>
+    <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtema;"></tr>
   </table>
 
   <mat-paginator #MatPaginatorTema [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
@@ -149,8 +155,8 @@
       <td mat-cell *matCellDef="let element">{{element.prediccion_raw}}</td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtemaBehaviour"></tr>
-    <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtemaBehaviour;"></tr>
+    <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtema"></tr>
+    <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtema;"></tr>
   </table>
 
   <mat-paginator #MatPaginatorSubtema [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
@@ -173,8 +179,13 @@
       <td mat-cell *matCellDef="let element">{{element.prediccion_raw}}</td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="headersPrediccionTemaSubtemaBehaviour"></tr>
-    <tr mat-row *matRowDef="let row; columns: headersPrediccionTemaSubtemaBehaviour;"></tr>
+    <ng-container matColumnDef="lo_utiliza">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Ya se encuentra utilizándolo?</th>
+      <td mat-cell *matCellDef="let element">{{element.lo_utiliza}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="headersPrediccionBehaviour"></tr>
+    <tr mat-row *matRowDef="let row; columns: headersPrediccionBehaviour;"></tr>
   </table>
 
   <mat-paginator #MatPaginatorBehaviour [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
